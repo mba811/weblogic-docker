@@ -21,6 +21,7 @@ RUN echo oracle:welcome1 | chpasswd
 
 ADD container-scripts/create-wls-domain.py /u01/create-wls-domain.py
 ADD wls1213_dev.zip /u01/wls1213_dev.zip
+ADD container-scripts/commEnv.sh /u01/oracle/commEnv.sh
 ADD container-scripts/add-machine.py /u01/oracle/add-machine.py
 ADD container-scripts/createMachine.sh /u01/oracle/createMachine.sh
 RUN chown oracle:oracle -R /u01
@@ -36,6 +37,7 @@ RUN sh configure.sh -silent
 ENV CONFIG_JVM_ARGS -Djava.security.egd=file:/dev/./urandom
 RUN /u01/oracle/wls12130/wlserver/common/bin/wlst.sh -skipWLSModuleScanning /u01/create-wls-domain.py
 RUN mkdir -p /u01/oracle/wls12130/user_projects/domains/base_domain/servers/AdminServer/security
+RUN cp /u01/oracle/commEnv.sh /u01/oracle/wls12130/wlserver/common/bin/commEnv.sh
 RUN echo "username=weblogic" > /u01/oracle/wls12130/user_projects/domains/base_domain/servers/AdminServer/security/boot.properties
 RUN echo "password=welcome1" >> /u01/oracle/wls12130/user_projects/domains/base_domain/servers/AdminServer/security/boot.properties
 RUN rm /u01/create-wls-domain.py /u01/wls1213_dev.zip
