@@ -6,7 +6,7 @@ This is a Dockerfile for [Oracle WebLogic 12c](http://www.oracle.com/technetwork
 
 ## How to Build
 
-To build this Docker container for your own usage, first please download the WebLogic 12c ZIP Free Distribution for Developers and drop the downloaded file in the same folder as the Dockerfile.
+Follow this procedure:
 
 1. Checkout the GitHub weblogic-docker repository
 
@@ -16,7 +16,7 @@ To build this Docker container for your own usage, first please download the Web
 
         cd weblogic-docker/weblogic12c-zip
 
-3. Drop the downloaded WebLogic 12c ZIP Distribution file **wls1213_dev.zip** in this folder
+3. [Download](http://www.oracle.com/technetwork/middleware/weblogic/downloads/wls-for-dev-1703574.html) and drop the WebLogic 12c ZIP Distribution file **wls1213_dev.zip** in this folder
 
 4. Execute the build script
 
@@ -43,7 +43,7 @@ This script will automagically start a Node Manager and add itself to the Admin 
 
 ## Deploying Java EE Applications
 
-You can use the WebLogic Maven Plugin or the WLST (WebLogic Scripting Tool) to deploy applications to the remote servers running on Docker containers.
+You can use the web-based [Administration Console](http://docs.oracle.com/middleware/1213/core/ASADM/getstart.htm#ASADM10025), the [WebLogic Maven Plugin](http://docs.oracle.com/middleware/1213/wls/WLPRG/maven.htm), the [WebLogic Deployer](http://docs.oracle.com/middleware/1213/wls/DEPGD/deploy.htm), or the [WLST](http://docs.oracle.com/middleware/1213/wls/WLSTG/config_wls.htm#i1027344) (WebLogic Scripting Tool) to deploy applications to the remote servers running on Docker containers.
 
 ## Dockerfile Source
 All source is on the [weblogic-docker GitHub repository](https://github.com/weblogic-community/weblogic-docker).

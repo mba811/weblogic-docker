@@ -9,7 +9,7 @@
 
 
 # Pull base image
-FROM dockerfile/java
+FROM dockerfile/java:oracle-java7
 
 MAINTAINER Bruno Borges <bruno.borges@oracle.com>
 
