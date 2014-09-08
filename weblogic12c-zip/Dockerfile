@@ -8,7 +8,7 @@
 #
 
 # Pull base image
-FROM dockerfile/java
+FROM dockerfile/java:oracle-java7
 
 MAINTAINER Bruno Borges <bruno.borges@oracle.com>
 
@@ -54,6 +54,13 @@ RUN echo ". /u01/oracle/wls12130/user_projects/domains/base_domain/bin/setDomain
 RUN echo "export PATH=$PATH:/u01/oracle/wls12130/user_projects/domains/base_domain/bin" >> /root/.bashrc
 
 WORKDIR /u01/oracle/home
+
+# Deploy JAX-RS 2.0 Shared Library by default
+# RUN /u01/oracle/wls12130/user_projects/domains/base_domain/bin/startWebLogic.sh &
+# RUN sleep 40
+# RUN java -cp /u01/oracle/wls12130/wlserver/server/lib/weblogic.jar weblogic.Deployer -username weblogic -password welcome1 -library -deploy /u01/oracle/wls12130/wlserver/common/deployable-libraries/jax-rs-2.0.war
+# RUN /u01/oracle/wls12130/user_projects/domains/base_domain/bin/stopWebLogic.sh
+
 
 # Define default command to start bash. 
 # Modify if you want to start a nodemanager or the admin server by default
