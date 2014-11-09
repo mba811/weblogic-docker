@@ -7,11 +7,18 @@ then
   echo "Download the WebLogic 12c ZIP Distribution and"
   echo "drop the file wls1213_dev.zip in this folder before"
   echo "building this WLS Docker container!"
-  exit 
+  exit
 fi
 
-MD5="0a9152e312997a630ac122ba45581a18  wls1213_dev.zip"
-MD5_CHECK="`md5sum wls1213_dev.zip`"
+unamestr=`uname`
+if [[ "$unamestr" == 'Darwin' ]]; then
+  MD5="MD5 (wls1213_dev.zip) = 0a9152e312997a630ac122ba45581a18"
+  MD5_CHECK="`md5 wls1213_dev.zip`"
+else
+  MD5="0a9152e312997a630ac122ba45581a18  wls1213_dev.zip"
+  MD5_CHECK="`md5sum wls1213_dev.zip`"
+fi
+
 
 if [ "$MD5" != "$MD5_CHECK" ]
 then
