@@ -61,9 +61,9 @@ RUN useradd -b /u01 -m -s /bin/bash oracle
 RUN echo oracle:$WLS_ADMIN_PASSWORD | chpasswd
 
 # Add files required to build this image
-ADD oraInst.loc /u01/oraInst.loc
-ADD install.file /u01/install.file
 ADD $WLS_PKG /u01/
+ADD container-scripts/oraInst.loc /u01/oraInst.loc
+ADD container-scripts/install.file /u01/install.file
 ADD container-scripts/jaxrs2-template.jar /u01/
 ADD container-scripts/create-wls-domain.py /u01/
 ADD container-scripts/commEnv.sh /u01/oracle/
