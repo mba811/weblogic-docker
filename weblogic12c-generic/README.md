@@ -23,6 +23,8 @@ Follow this procedure:
 
 3. [Download](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html) and drop the Oracle JDK 8u25 RPM 64bit file **jdk-8u25-linux-x64.rpm** in this folder
 
+		Linux x64	135.6 MB  	jdk-8u25-linux-x64.rpm
+
 4. [Download](http://www.oracle.com/technetwork/middleware/weblogic/downloads/wls-for-dev-1703574.html) and drop the WebLogic 12c Generic Distribution file **fmw_12.1.3.0.0_wls.jar** in this folder
 
 		Generic (881 MB) - fmw_12.1.3.0.0_wls.jar
