@@ -77,6 +77,7 @@ USER oracle
 
 # Installation of Weblogic 
 RUN unzip /u01/$WLS_ZIP -d /u01/oracle/ > /dev/null
+RUN ln -s /u01/oracle/$WLS_DIR /u01/oracle/weblogic
 WORKDIR /u01/oracle/$WLS_DIR
 RUN sh configure.sh -silent
 RUN /u01/oracle/$WLS_DIR/wlserver/common/bin/wlst.sh -skipWLSModuleScanning /u01/create-wls-domain.py

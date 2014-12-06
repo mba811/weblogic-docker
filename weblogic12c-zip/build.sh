@@ -1,4 +1,5 @@
 #!/bin/bash
+IMAGE_NAME=oracle/weblogic-dev:12.1.3
 JAVA_VERSION="8u25"
 JAVA_PKG="jdk-${JAVA_VERSION}-linux-x64.rpm"
 JAVA_PKG_MD5="6a8897b5d92e5850ef3458aa89a5e9d7"
@@ -31,7 +32,7 @@ echo "====================="
 
 if [ ! -e $WLS_PKG ]
 then
-  echo "Download the WebLogic 12c ZIP Distribution and"
+  echo "Download the WebLogic 12c installer and"
   echo "drop the file $WLS_PKG in this folder before"
   echo "building this WLS Docker image!"
   exit 
@@ -48,7 +49,7 @@ fi
 
 echo "====================="
 
-docker build -t oracle/weblogic .
+docker build -t $IMAGE_NAME .
 
 echo ""
 echo "WebLogic Docker Container is ready to be used. To start, run 'dockWebLogic.sh'"
