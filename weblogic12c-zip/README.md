@@ -35,6 +35,8 @@ To boot the WebLogic Admin Server, execute
 
 The argument '-attach' in this script will automatically bind port 7001 to the host. You will then be able to access the Admin Console at http://localhost:7001/console. If you don't use this argument, the script will tell you which IP address this container is running on and present you with the URL to open the Admin Console.
 
+On mac you can use `boot2docker ip` to find out your ip for the weblogic console forwarding address
+
 To boot a Node Manager to be able to setup a cluster, execute
 
     dockNodeManager.sh
