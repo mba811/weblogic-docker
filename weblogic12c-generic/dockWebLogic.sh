@@ -1,4 +1,16 @@
 #!/bin/sh
+#
+# Usage:  
+#    -a: attach port 7001 to host
+#    -p: creates a PID file in case it's one WLS Admin per host
+#    -n: give a different name for the container. default: wlsadmin
+#  $ sudo sh dockWebLogic.sh -n [container name running admin server]
+#
+# Since: October, 2014
+# Author: bruno.borges@oracle.com
+# Description: script to create a container with WLS Admin Server
+# based on IMAGE_NAME within it.
+#
 TMP_CID_FILE=tmp/weblogic.cid
 DOCKER_IMAGE_NAME=oracle/weblogic:12.1.3
 DOCKER_CONTAINER_NAME=wlsadmin

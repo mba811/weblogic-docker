@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # Usage:  
-#         dockNodeManager -n [container name running admin server]
+#         dockNodeManager.sh -n [container name running admin server]
 #
 # Since: October, 2014
 # Author: bruno.borges@oracle.com
