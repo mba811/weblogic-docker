@@ -77,10 +77,9 @@ RUN echo "* hard nofile 16384" >> /etc/security/limits.conf
 RUN echo "# End of file"  >> /etc/security/limits.conf
 
 #Change the kernel parameters that need changing. 
-RUN echo "net.core.rmem_max=4192608" >> /etc/sysctl.conf
-RUN echo "net.core.wmem_max=4192608" >> /etc/sysctl.conf
-RUN /sbin/sysctl -p
-
+RUN echo "net.core.rmem_max=4192608" > /u01/oracle/sysctl.conf
+RUN echo "net.core.wmem_max=4192608" >> /u01/oracle/sysctl.conf
+RUN sysctl -e -p /u01/oracle/sysctl.conf
 
 # Adjust file permissions, go to /u01 as user 'oracle' to proceed with WLS installation
 RUN chown oracle:oracle -R /u01
