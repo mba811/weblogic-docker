@@ -9,7 +9,7 @@
 #
 
 SCRIPTS_DIR="$( cd "$( dirname "$0" )" && pwd )"
-. $SCRIPTS_DIR/setDockerEnv.sh
+. $SCRIPTS_DIR/setDockerEnv.sh $*
 
 # CHECK FOR ARGUMENTS
 # -n [name] = the name of the admin server container which this NM will automatically plug to. Must exist. Defaults to 'wlsadmin'.

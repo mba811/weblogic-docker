@@ -12,10 +12,10 @@
 #
 
 SCRIPTS_DIR="$( cd "$( dirname "$0" )" && pwd )"
-. $SCRIPTS_DIR/setDockerEnv.sh
+. $SCRIPTS_DIR/setDockerEnv.sh $*
 
 # CHECK AND READ ARGUMENTS
-while getopts "ha:pn:" optname
+while getopts "ha:n:" optname
   do
     case "$optname" in
       "h")
@@ -37,7 +37,7 @@ while getopts "ha:pn:" optname
         ;;
       *)
       # Should not occur
-        echo "Unknown error while processing options"
+        echo "Unknown error while processing options inside dockWebLogic.sh"
         ;;
     esac
   done
