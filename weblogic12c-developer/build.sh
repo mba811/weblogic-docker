@@ -1,5 +1,5 @@
 #!/bin/bash
-IMAGE_NAME=oracle/weblogic-dev:12.1.3
+IMAGE_NAME=oracle/weblogic:12.1.3
 JAVA_VERSION="8u25"
 JAVA_PKG="jdk-${JAVA_VERSION}-linux-x64.rpm"
 JAVA_PKG_MD5="6a8897b5d92e5850ef3458aa89a5e9d7"
