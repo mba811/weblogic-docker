@@ -23,7 +23,7 @@ while getopts "ha:n:" optname
 	echo "   -a [port]: attach AdminServer port to host. If -a is present, will attach. Defaults to 7001."
 	echo "   -n [name]: give a different name for the container. default: wlsadmin"
 	echo ""
-	echo " # sh dockWebLogic.sh -a 8080 -n mywlsadmin -p"
+	echo " # sh dockWebLogic.sh [-a [port]] [-n mywlsadmin]"
         exit 0
         ;;
       "a")
