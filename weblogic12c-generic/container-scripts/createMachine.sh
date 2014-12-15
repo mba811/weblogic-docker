@@ -1,12 +1,13 @@
 #!/bin/bash
 
 # Set WLS domain environment
-. /u01/oracle/$WLS_DIR/user_projects/domains/base_domain/bin/setDomainEnv.sh
+. /u01/oracle/weblogic/user_projects/domains/base_domain/bin/setDomainEnv.sh
 
-# TODO: check if machine already exists. If it does, make sure it listen to the correct ip address
+# TODO: check if machine already exists. If it does, make sure it listen to the correct ip address before start NM.
+# if not, then add after start NM.
 
 # Start Node Manager
-nohup /u01/oracle/$WLS_DIR/user_projects/domains/base_domain/bin/startNodeManager.sh &
+nohup /u01/oracle/weblogic/user_projects/domains/base_domain/bin/startNodeManager.sh &
 
 # Add if necessary
 sleep 5 && java -Dweblogic.security.SSL.ignoreHostnameVerification=true weblogic.WLST \

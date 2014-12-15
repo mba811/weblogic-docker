@@ -8,7 +8,7 @@
 
 # Open default domain template
 # ======================
-readTemplate("/u01/oracle/" + os.environ["WLS_DIR"]  + "/wlserver/common/templates/wls/wls.jar")
+readTemplate("/u01/oracle/weblogic/wlserver/common/templates/wls/wls.jar")
 
 # Configure the Administration Server and SSL port.
 # =========================================================
@@ -31,7 +31,7 @@ cmo.setClientCertificateEnforced(false)
 # =====================================
 cd('/')
 cd('Security/base_domain/User/weblogic')
-cmo.setPassword(os.environ["WLS_ADMIN_PASSWORD"])
+cmo.setPassword(os.environ["ADMIN_PASSWORD"])
 # Please set password here before using this script, e.g. cmo.setPassword('value')
 
 # Create a JMS Server
@@ -101,12 +101,12 @@ cd('NMProperties')
 set('ListenAddress','')
 set('NativeVersionEnabled', 'false')
 
-writeDomain('/u01/oracle/' + os.environ["WLS_DIR"]  + '/user_projects/domains/base_domain')
+writeDomain('/u01/oracle/weblogic/user_projects/domains/base_domain')
 closeTemplate()
 
 # Enable JAX-RS 2.0 by default on this domain
 # ===========================================
-readDomain('/u01/oracle/' + os.environ["WLS_DIR"]  + '/user_projects/domains/base_domain')
+readDomain('/u01/oracle/weblogic/user_projects/domains/base_domain')
 addTemplate('/u01/jaxrs2-template.jar')
 updateDomain()
 closeDomain()

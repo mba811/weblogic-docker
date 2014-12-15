@@ -9,11 +9,12 @@ import os
 machine_name = os.environ['DOCKER_CONTAINER_NAME']
 listen_address = socket.gethostbyname(socket.gethostname())
 
-connect('weblogic',os.environ["WLS_ADMIN_PASSWORD"],'t3://wlsadmin:7001')
+connect('weblogic',os.environ["ADMIN_PASSWORD"],'t3://wlsadmin:7001')
 
 edit()
 startEdit()
 
+# check if machine already exists. If it does, update listen address. If not, create it.
 cd('/')
 cmo.createMachine(machine_name)
 
