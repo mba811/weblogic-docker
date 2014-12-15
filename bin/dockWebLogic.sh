@@ -15,38 +15,46 @@ SCRIPTS_DIR="$( cd "$( dirname "$0" )" && pwd )"
 . $SCRIPTS_DIR/setDockerEnv.sh $*
 
 # CHECK AND READ ARGUMENTS
-while getopts "ha:n:" optname
+while getopts "an:p:h" optname
   do
     case "$optname" in
       "h")
 	echo "Usage:"
-	echo "   -a [port]: attach AdminServer port to host. If -a is present, will attach. Defaults to 7001."
-	echo "   -n name: give a different name for the container. default: wlsadmin"
+	echo "   -a     : attach AdminServer port to host. If -a is present, will attach. Change default (7001) with -p port"
+        echo "   -p port: which port on host to attach AdminServer. Default: 7001"
+	echo "   -n name: give a different name for the container. Default: wlsadmin"
 	echo ""
-	echo " # sh dockWebLogic.sh [-a [port]] [-n mywlsadmin]"
+	echo " # sh dockWebLogic.sh [-a [-p port]] [-n mywlsadmin]"
         exit 0
         ;;
       "a")
-        if [ "" != "$OPTARG" ]; then
-          ATTACH_ADMIN_TO=$OPTARG
-        fi
-        ATTACH_DEFAULT_PORT="-p $ATTACH_ADMIN_TO:7001"
+        MUST_ATTACH=true
+        ;;
+      "p")
+        ATTACH_ADMIN_TO=$OPTARG
         ;;
       "n")
         ADMIN_CONTAINER_NAME="$OPTARG"
         ;;
       *)
-      # Should not occur
-        echo "Unknown error while processing options inside dockWebLogic.sh"
+        exit 1
         ;;
     esac
   done
+
+if [ $MUST_ATTACH ]; then
+    ATTACH_DEFAULT_PORT="-p $ATTACH_ADMIN_TO:7001"
+fi
 
 # RUN THE DOCKER COMMAND
 docker run \
  -d $ATTACH_DEFAULT_PORT \
  --name $ADMIN_CONTAINER_NAME $IMAGE_NAME \
  /u01/oracle/weblogic/user_projects/domains/base_domain/startWebLogic.sh
+
+if [ $? -eq 1 ]; then
+  exit $?
+fi;
 
 # EXTRACT THE IP ADDRESS
 if [ -n "${ATTACH_DEFAULT_PORT}" ]
