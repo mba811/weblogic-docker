@@ -7,10 +7,11 @@ while getopts "hd" optname
   do
     case "$optname" in
       "h")
-        echo "Usage:"
-        echo "   -d: creates image based on 'weblogic12c-developer' distribution"
+        echo "Usage: buildDockerImage.sh [-d]"
         echo ""
-        echo " # sh buildDockerImage.sh [-d]"
+        echo "    -d: creates image based on 'weblogic12c-developer' distribution, if present. "
+        echo "        'weblogic12c-generic' otherwhise."
+        echo ""
         exit 0
         ;;
       "d")

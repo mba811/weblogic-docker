@@ -17,8 +17,11 @@ while getopts "hn:" optname
   do
     case "$optname" in
       "h")
-	echo "Usage:  "
-	echo "       dockNodeManager.sh [-n wls_admin_container_name]"
+	echo "Usage: dockNodeManager.sh [-n wls_admin_container_name] "
+	echo ""
+	echo "    -n: name of the container with a WebLogic AdminServer orchestrating a WebLogic Domain."
+	echo "        Defaults to 'wlsadmin'"
+	echo ""
         exit 0
         ;;
       "n")
