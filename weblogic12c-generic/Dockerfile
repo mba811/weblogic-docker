@@ -47,13 +47,17 @@ ENV ADMIN_PASSWORD welcome1
 # Install and configure Oracle JDK 8u25
 # -------------------------------------
 COPY $JAVA_RPM /root/
-RUN rpm -i /root/$JAVA_RPM && rm /root/$JAVA_RPM
+RUN rpm -i /root/$JAVA_RPM && \ 
+    rm /root/$JAVA_RPM
 ENV JAVA_HOME /usr/java/default
 ENV CONFIG_JVM_ARGS -Djava.security.egd=file:/dev/./urandom
 
 # Setup required packages (unzip), filesystem, and oracle user
 # ------------------------------------------------------------
-RUN mkdir /u01 && chmod a+xr /u01 && useradd -b /u01 -m -s /bin/bash oracle && echo oracle:$ADMIN_PASSWORD | chpasswd
+RUN mkdir /u01 && \ 
+    chmod a+xr /u01 && \ 
+    useradd -b /u01 -m -s /bin/bash oracle && \ 
+    echo oracle:$ADMIN_PASSWORD | chpasswd
 
 # Add files required to build this image
 COPY $WLS_PKG /u01/
@@ -61,10 +65,15 @@ COPY container-scripts/* /u01/
 RUN mv /u01/add-machine.py /u01/createMachine.sh /u01/oracle/
 
 # Change the open file limits in /etc/security/limits.conf
-RUN sed -i '/.*End of file/d' /etc/security/limits.conf && echo "* soft nofile 16384" >> /etc/security/limits.conf && echo "* hard nofile 16384" >> /etc/security/limits.conf && echo "# End of file"  >> /etc/security/limits.conf
+RUN sed -i '/.*EOF/d' /etc/security/limits.conf && \
+    echo "* soft nofile 16384" >> /etc/security/limits.conf && \ 
+    echo "* hard nofile 16384" >> /etc/security/limits.conf && \ 
+    echo "# EOF"  >> /etc/security/limits.conf
 
-#Change the kernel parameters that need changing. 
-RUN echo "net.core.rmem_max=4192608" > /u01/oracle/sysctl.conf && echo "net.core.wmem_max=4192608" >> /u01/oracle/sysctl.conf && sysctl -e -p /u01/oracle/sysctl.conf
+# Change the kernel parameters that need changing.
+RUN echo "net.core.rmem_max=4192608" > /u01/oracle/.sysctl.conf && \
+    echo "net.core.wmem_max=4192608" >> /u01/oracle/.sysctl.conf && \ 
+    sysctl -e -p /u01/oracle/.sysctl.conf
 
 # Adjust file permissions, go to /u01 as user 'oracle' to proceed with WLS installation
 RUN chown oracle:oracle -R /u01
@@ -78,13 +87,15 @@ RUN java -jar $WLS_PKG -silent -responseFile /u01/install.file -invPtrLoc /u01/o
 WORKDIR /u01/oracle/weblogic
 
 # Configuration of WLS Domain
-RUN /u01/oracle/weblogic/wlserver/common/bin/wlst.sh -skipWLSModuleScanning /u01/create-wls-domain.py
-RUN mkdir -p /u01/oracle/weblogic/user_projects/domains/base_domain/servers/AdminServer/security
-RUN mv /u01/commEnv.sh /u01/oracle/weblogic/wlserver/common/bin/commEnv.sh
-RUN echo "username=weblogic" > /u01/oracle/weblogic/user_projects/domains/base_domain/servers/AdminServer/security/boot.properties && echo "password=$ADMIN_PASSWORD" >> /u01/oracle/weblogic/user_projects/domains/base_domain/servers/AdminServer/security/boot.properties
+RUN /u01/oracle/weblogic/wlserver/common/bin/wlst.sh -skipWLSModuleScanning /u01/create-wls-domain.py && \
+    mkdir -p /u01/oracle/weblogic/user_projects/domains/base_domain/servers/AdminServer/security && \
+    mv /u01/commEnv.sh /u01/oracle/weblogic/wlserver/common/bin/commEnv.sh && \
+    echo "username=weblogic" > /u01/oracle/weblogic/user_projects/domains/base_domain/servers/AdminServer/security/boot.properties && \ 
+    echo "password=$ADMIN_PASSWORD" >> /u01/oracle/weblogic/user_projects/domains/base_domain/servers/AdminServer/security/boot.properties
 
 # Configuration of user 'oracle' environment
-RUN echo ". /u01/oracle/weblogic/user_projects/domains/base_domain/bin/setDomainEnv.sh" >> /u01/oracle/.bashrc && echo "export PATH=$PATH:/u01/oracle/weblogic/wlserver/common/bin:/u01/oracle/weblogic/user_projects/domains/base_domain/bin" >> /u01/oracle/.bashrc
+RUN echo ". /u01/oracle/weblogic/user_projects/domains/base_domain/bin/setDomainEnv.sh" >> /u01/oracle/.bashrc && \ 
+    echo "export PATH=$PATH:/u01/oracle/weblogic/wlserver/common/bin:/u01/oracle/weblogic/user_projects/domains/base_domain/bin" >> /u01/oracle/.bashrc
 
 # Cleanup
 RUN rm /u01/create-wls-domain.py /u01/$WLS_PKG /u01/jaxrs2-template.jar /u01/oraInst.loc /u01/install.file
@@ -94,7 +105,8 @@ EXPOSE 5556 7001 7002
 
 # Make sure root has also right PATH and WLS environment variables configured
 USER root
-RUN echo ". /u01/oracle/weblogic/user_projects/domains/base_domain/bin/setDomainEnv.sh" >> /root/.bashrc && echo "export PATH=$PATH:/u01/oracle/weblogic/wlserver/common/bin:/u01/oracle/weblogic/user_projects/domains/base_domain/bin" >> /root/.bashrc
+RUN echo ". /u01/oracle/weblogic/user_projects/domains/base_domain/bin/setDomainEnv.sh" >> /root/.bashrc && \ 
+    echo "export PATH=$PATH:/u01/oracle/weblogic/wlserver/common/bin:/u01/oracle/weblogic/user_projects/domains/base_domain/bin" >> /root/.bashrc
 
 # Final setup
 USER oracle
