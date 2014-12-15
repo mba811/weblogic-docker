@@ -46,7 +46,8 @@ ENV ADMIN_PASSWORD welcome1
 # Install and configure Oracle JDK 8u25
 # -------------------------------------
 ADD $JAVA_RPM /root/
-RUN rpm -i /root/$JAVA_RPM && rm /root/$JAVA_RPM
+RUN rpm -i /root/$JAVA_RPM && \ 
+    rm /root/$JAVA_RPM
 ENV JAVA_HOME /usr/java/default
 ENV CONFIG_JVM_ARGS -Djava.security.egd=file:/dev/./urandom
 
@@ -54,8 +55,10 @@ ENV CONFIG_JVM_ARGS -Djava.security.egd=file:/dev/./urandom
 # ------------------------------------------------------------
 # Enable this if behind proxy
 # RUN sed -i -e '/^\[main\]/aproxy=http://proxy.com:80' /etc/yum.conf
-RUN yum install -y unzip && yum clean all
-RUN mkdir /u01 && chmod a+xr /u01 && useradd -b /u01 -m -s /bin/bash oracle && echo oracle:$ADMIN_PASSWORD | chpasswd
+RUN yum install -y unzip && yum clean all && \
+    mkdir /u01 && chmod a+xr /u01 && \ 
+    useradd -b /u01 -m -s /bin/bash oracle && \ 
+    echo oracle:$ADMIN_PASSWORD | chpasswd
 
 # Add files required to build this image
 ADD $WLS_PKG /u01/
@@ -68,24 +71,26 @@ WORKDIR /u01
 USER oracle
 
 # Installation of Weblogic 
-RUN unzip /u01/$WLS_PKG -d /u01/oracle/ > /dev/null
-RUN ln -s /u01/oracle/wls12130 /u01/oracle/weblogic
+RUN unzip /u01/$WLS_PKG -d /u01/oracle/ > /dev/null && \ 
+    ln -s /u01/oracle/wls12130 /u01/oracle/weblogic
 WORKDIR /u01/oracle/weblogic
-RUN sh configure.sh -silent
-RUN /u01/oracle/weblogic/wlserver/common/bin/wlst.sh -skipWLSModuleScanning /u01/create-wls-domain.py
-RUN mkdir -p /u01/oracle/weblogic/user_projects/domains/base_domain/servers/AdminServer/security
-RUN mv /u01/commEnv.sh /u01/oracle/weblogic/wlserver/common/bin/commEnv.sh
-RUN echo "username=weblogic" > /u01/oracle/weblogic/user_projects/domains/base_domain/servers/AdminServer/security/boot.properties && echo "password=$ADMIN_PASSWORD" >> /u01/oracle/weblogic/user_projects/domains/base_domain/servers/AdminServer/security/boot.properties
-RUN rm /u01/create-wls-domain.py /u01/$WLS_PKG /u01/jaxrs2-template.jar
-RUN echo ". /u01/oracle/weblogic/user_projects/domains/base_domain/bin/setDomainEnv.sh" >> /u01/oracle/.bashrc
-RUN echo "export PATH=$PATH:/u01/oracle/weblogic/wlserver/common/bin:/u01/oracle/weblogic/user_projects/domains/base_domain/bin" >> /u01/oracle/.bashrc
+RUN sh configure.sh -silent && \ 
+    /u01/oracle/weblogic/wlserver/common/bin/wlst.sh -skipWLSModuleScanning /u01/create-wls-domain.py && \ 
+    mkdir -p /u01/oracle/weblogic/user_projects/domains/base_domain/servers/AdminServer/security && \ 
+    mv /u01/commEnv.sh /u01/oracle/weblogic/wlserver/common/bin/commEnv.sh && \ 
+    echo "username=weblogic" > /u01/oracle/weblogic/user_projects/domains/base_domain/servers/AdminServer/security/boot.properties && \ 
+    echo "password=$ADMIN_PASSWORD" >> /u01/oracle/weblogic/user_projects/domains/base_domain/servers/AdminServer/security/boot.properties && \ 
+    rm /u01/create-wls-domain.py /u01/$WLS_PKG /u01/jaxrs2-template.jar && \ 
+    echo ". /u01/oracle/weblogic/user_projects/domains/base_domain/bin/setDomainEnv.sh" >> /u01/oracle/.bashrc && \ 
+    echo "export PATH=$PATH:/u01/oracle/weblogic/wlserver/common/bin:/u01/oracle/weblogic/user_projects/domains/base_domain/bin" >> /u01/oracle/.bashrc
 
 # Expose Node Manager default port, and also default http/https ports for admin console
 EXPOSE 5556 7001 7002
 
 # Make sure root has also right PATH and WLS environment variables configured
 USER root
-RUN echo ". /u01/oracle/weblogic/user_projects/domains/base_domain/bin/setDomainEnv.sh" >> /root/.bashrc && echo "export PATH=$PATH:/u01/oracle/weblogic/wlserver/common/bin:/u01/oracle/weblogic/user_projects/domains/base_domain/bin" >> /root/.bashrc
+RUN echo ". /u01/oracle/weblogic/user_projects/domains/base_domain/bin/setDomainEnv.sh" >> /root/.bashrc && \ 
+    echo "export PATH=$PATH:/u01/oracle/weblogic/wlserver/common/bin:/u01/oracle/weblogic/user_projects/domains/base_domain/bin" >> /root/.bashrc
 
 WORKDIR /u01/oracle
 USER oracle
