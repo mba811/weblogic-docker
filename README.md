@@ -49,7 +49,7 @@ To start the WebLogic AdminServer, you can simply call **docker run** command on
 	   -n name: give a different name for the container. Default: wlsadmin
 	
 ### Create a Cluster
-WebLogic has a [Machine]() concept, which is an operational system with an agent, the Node Manager. This resource allows WebLogic to add [Managed Servers]() to an underlying domain in order to create a flexible environment of servers for different applications and resources, and also to define a [Cluster](). By using **Machines** from containers, you can easily create a [Dynamic Cluster]() by simply firing new NodeManagers containers that will be automatically added to the domain running on the AdminServer, started previously. 
+WebLogic has a [Machine](https://docs.oracle.com/middleware/1213/wls/WLACH/taskhelp/machines/ConfigureMachines.html) concept, which is an operational system with an agent, the Node Manager. This resource allows WebLogic to add [Managed Servers](https://docs.oracle.com/middleware/1213/wls/WLACH/taskhelp/domainconfig/CreateManagedServers.html) to an underlying domain in order to create a flexible environment of servers for different applications and resources, and also to define a [Cluster](). By using **Machines** from containers, you can easily create a [Dynamic Cluster]() by simply firing new NodeManagers containers that will be automatically added to the domain running on the AdminServer, started previously. 
 
 To easily plug newly created **Machines** to a domain running on another container, use the [dockNodeManager.sh]() script.
 
