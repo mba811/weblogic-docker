@@ -5,7 +5,7 @@ Docker configurations to facilitate installation, configuration, and environment
 ## Install Oracle Linux 7 Base Docker Image
 The Dockerfiles contained in this project will build images based on the Oracle Linux 7.0 Base Docker Image. In order to easily install that, run the following script:
 
-		$ install-ol7-docker-image.sh
+		$ bin/install-ol7-docker-image.sh
 
 For more information and documentation, read the [Docker Images from Oracle Linux](http://public-yum.oracle.com/docker-images) page.
 
