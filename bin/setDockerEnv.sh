@@ -1,6 +1,5 @@
 #!/bin/sh
 DISTRIBUTION="weblogic12c-generic"
-SKIP_BASE_DOMAIN_CREATION=false
 
 if [ -z "$IMAGE_NAME" ]; then
 	IMAGE_NAME="oracle/weblogic:12.1.3"
