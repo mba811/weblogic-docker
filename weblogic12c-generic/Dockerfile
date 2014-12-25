@@ -39,8 +39,7 @@ ENV WLS_PKG  fmw_12.1.3.0.0_wls.jar
 
 # WLS Admin Password (you may change)
 # This password is used for:
-#  (a) 'weblogic' admin user of WebLogic 
-#  (b) 'oracle' Linux user in this image
+#  (a) 'oracle' Linux user in this image
 # -----------------------------------
 ENV ADMIN_PASSWORD welcome1
 
@@ -61,8 +60,7 @@ RUN mkdir /u01 && \
 
 # Add files required to build this image
 COPY $WLS_PKG /u01/
-COPY container-scripts/* /u01/
-RUN mv /u01/add-machine.py /u01/createMachine.sh /u01/oracle/
+COPY setup/* /u01/
 
 # Change the open file limits in /etc/security/limits.conf
 RUN sed -i '/.*EOF/d' /etc/security/limits.conf && \
@@ -77,41 +75,16 @@ RUN echo "net.core.rmem_max=4192608" > /u01/oracle/.sysctl.conf && \
 
 # Adjust file permissions, go to /u01 as user 'oracle' to proceed with WLS installation
 RUN chown oracle:oracle -R /u01
-
 WORKDIR /u01
 USER oracle
 
 # Installation of WebLogic 
 RUN mkdir /u01/oracle/.inventory
-RUN java -jar $WLS_PKG -silent -responseFile /u01/install.file -invPtrLoc /u01/oraInst.loc -jreLoc $JAVA_HOME
+RUN java -jar $WLS_PKG -silent -responseFile /u01/install.file -invPtrLoc /u01/oraInst.loc -jreLoc $JAVA_HOME && \
+    rm $WLS_PKG /u01/oraInst.loc /u01/install.file
+
 WORKDIR /u01/oracle/weblogic
-
-# Configuration of WLS Domain
-RUN /u01/oracle/weblogic/wlserver/common/bin/wlst.sh -skipWLSModuleScanning /u01/create-wls-domain.py && \
-    mkdir -p /u01/oracle/weblogic/user_projects/domains/base_domain/servers/AdminServer/security && \
-    mv /u01/commEnv.sh /u01/oracle/weblogic/wlserver/common/bin/commEnv.sh && \
-    echo "username=weblogic" > /u01/oracle/weblogic/user_projects/domains/base_domain/servers/AdminServer/security/boot.properties && \ 
-    echo "password=$ADMIN_PASSWORD" >> /u01/oracle/weblogic/user_projects/domains/base_domain/servers/AdminServer/security/boot.properties
-
-# Configuration of user 'oracle' environment
-RUN echo ". /u01/oracle/weblogic/user_projects/domains/base_domain/bin/setDomainEnv.sh" >> /u01/oracle/.bashrc && \ 
-    echo "export PATH=$PATH:/u01/oracle/weblogic/wlserver/common/bin:/u01/oracle/weblogic/user_projects/domains/base_domain/bin" >> /u01/oracle/.bashrc
-
-# Cleanup
-RUN rm /u01/create-wls-domain.py /u01/$WLS_PKG /u01/jaxrs2-template.jar /u01/oraInst.loc /u01/install.file
-
-# Expose Node Manager default port, and also default http/https ports for admin console
-EXPOSE 5556 7001 7002
-
-# Make sure root has also right PATH and WLS environment variables configured
-USER root
-RUN echo ". /u01/oracle/weblogic/user_projects/domains/base_domain/bin/setDomainEnv.sh" >> /root/.bashrc && \ 
-    echo "export PATH=$PATH:/u01/oracle/weblogic/wlserver/common/bin:/u01/oracle/weblogic/user_projects/domains/base_domain/bin" >> /root/.bashrc
-
-# Final setup
 USER oracle
-WORKDIR /u01/oracle
 
 # Define default command to start bash. 
-CMD ["/u01/oracle/weblogic/user_projects/domains/base_domain/bin/startWebLogic.sh"]
-
+CMD ["/bin/bash"]
