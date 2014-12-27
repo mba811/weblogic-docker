@@ -25,6 +25,9 @@ First decide which distribution you want to use, then download the required pack
 	
 The Dockerfiles for both distributions will create same WebLogic Domain with the following patches and configurations:
 
+#### For Developers (weblogic12c-developer)
+This [Dockerfile](https://github.com/weblogic-community/weblogic-docker/blob/master/weblogic12c-developer/Dockerfile) will create an image using the Developer ZIP Installer for WebLogic 12c 12.1.3. It will configure a base_domain with the following settings:
+
  * JPA 2.1 enabled
  * JAX-RS 2.0 shared library deployed
  * Admin Username: **weblogic**
@@ -33,13 +36,18 @@ The Dockerfiles for both distributions will create same WebLogic Domain with the
  * Oracle Linux Password: **welcome1**
  * WebLogic Domain Name: **base_domain**
 
-### Customize the WebLogic Base Domain
-The WLST script used to create the domain is [create-wls-domain.py](https://github.com/weblogic-community/weblogic-docker/blob/master/weblogic12c-generic/container-scripts/create-wls-domain.py) (same for both distributions). This script will by default add JMS resources. You may want to tune this script with your own setup to create DataSources and Connection pools, Security Realms, deploy artifacts, and so on.
+#### Generic Installer (weblogic12c-generic)
+This second [Dockerfile](https://github.com/weblogic-community/weblogic-docker/blob/master/weblogic12c-generic/Dockerfile) creates an image with only WebLogic 12c (Generic Installer) installed, and no domain configured. 
 
-You can also extend this image and override the existing domain, or create a new one with WLST.
+For an example of how to extend this image and create your own domain, you can look into the third [Dockerfile](https://github.com/weblogic-community/weblogic-docker/blob/master/weblogic12c-generic/container-domain/Dockerfile) located in **weblogic12c-generic/container-domain** folder.
+
+### Write your own WebLogic domain with WLST
+The best way to create your own, or extend domains is by using [WebLogic Scripting Tool](http://docs.oracle.com/cd/E57014_01/cross/wlsttasks.htm). The WLST script used to create domains in both Dockerfiles (for [developers](https://github.com/weblogic-community/weblogic-docker/blob/master/weblogic12c-developer/container-scripts/create-wls-domain.py), and the extended example for [generic installer](https://github.com/weblogic-community/weblogic-docker/blob/master/weblogic12c-generic/container-domain/container-scripts/create-wls-domain.py)) is **create-wls-domain.py** (same for both distributions). This script by default adds JMS resources and a few other settings. You may want to tune this script with your own setup to create DataSources and Connection pools, Security Realms, deploy artifacts, and so on.
+
+You can also extend images and override the existing domain, or create a new one with WLST.
 
 ### Running WebLogic AdminServer
-To start the WebLogic AdminServer, you can simply call **docker run** command on this image, but we recommend you use the [dockWebLogic.sh](https://github.com/weblogic-community/weblogic-docker/blob/master/bin/dockWebLogic.sh) script. It has the following usage:
+To start the WebLogic AdminServer, you can simply call **docker run** command, but we recommend you use the [dockWebLogic.sh](https://github.com/weblogic-community/weblogic-docker/blob/master/bin/dockWebLogic.sh) script. It has the following usage:
 
 	$ ./dockWebLogic.sh -h
 	Usage: dockWebLogic.sh [-a [-p port]] [-n mywlsadmin]
