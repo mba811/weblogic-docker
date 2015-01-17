@@ -2,12 +2,8 @@ WebLogic 12c on Docker
 ===============
 Docker configurations to facilitate installation, configuration, and environment setup for developers.
 
-## Install Oracle Linux 7 Base Docker Image
-The Dockerfiles contained in this project will build images based on the Oracle Linux 7.0 Base Docker Image. In order to easily install that, run the following script:
-
-		$ bin/install-ol7-docker-image.sh
-
-For more information and documentation, read the [Docker Images from Oracle Linux](http://public-yum.oracle.com/docker-images) page.
+## Based on Oracle Linux Docker image
+For more information please read the [Docker Images from Oracle Linux](http://public-yum.oracle.com/docker-images) page.
 
 ## How to build and run
 This project comes with two configurations for a WebLogic Docker Image. One is based on the Developer distribution, the other one on the Generic. See below for more details.
