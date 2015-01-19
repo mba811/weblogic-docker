@@ -9,7 +9,7 @@ while getopts "hd" optname
       "h")
         echo "Usage: buildDockerImage.sh [-d]"
         echo ""
-        echo "    -d: creates image based on 'weblogic12c-developer' distribution, if present. "
+        echo "    -d: creates image based on 'weblogic12c-developer' distribution. "
         echo "        'weblogic12c-generic' otherwhise."
         echo ""
         exit 0
@@ -76,6 +76,11 @@ echo "====================="
 # BUILD THE IMAGE
 docker build -t $IMAGE_NAME .
 
-echo ""
-echo "WebLogic Docker Container is ready to be used. To start, run 'dockWebLogic.sh'"
-
+if [ $? -eq 0 ]
+then
+  echo ""
+  echo "WebLogic Docker Container is ready to be used. To start, run 'dockWebLogic.sh'"
+else
+  echo ""
+  echo "WebLogic Docker Container was NOT successfully created. Check the output and correct any reported problems with the docker build operation."
+fi

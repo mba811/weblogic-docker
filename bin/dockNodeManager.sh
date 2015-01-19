@@ -13,9 +13,12 @@ SCRIPTS_DIR="$( cd "$( dirname "$0" )" && pwd )"
 
 # CHECK FOR ARGUMENTS
 # -n [name] = the name of the admin server container which this NM will automatically plug to. Must exist. Defaults to 'wlsadmin'.
-while getopts "hn:" optname
+while getopts "dhn:" optname
   do
     case "$optname" in
+      "d")
+        setup_developer
+        ;;
       "h")
 	echo "Usage: dockNodeManager.sh [-n wls_admin_container_name] "
 	echo ""

@@ -15,7 +15,7 @@ SCRIPTS_DIR="$( cd "$( dirname "$0" )" && pwd )"
 . $SCRIPTS_DIR/setDockerEnv.sh $*
 
 # CHECK AND READ ARGUMENTS
-while getopts "an:p:h" optname
+while getopts "an:p:hd" optname
   do
     case "$optname" in
       "h")
@@ -35,6 +35,9 @@ while getopts "an:p:h" optname
         ;;
       "n")
         ADMIN_CONTAINER_NAME="$OPTARG"
+        ;;
+      "d")
+        setup_developer
         ;;
       *)
         exit 1

@@ -23,6 +23,17 @@
 # Run: 
 #      $ sudo docker build -t oracle/weblogic:12.1.3 .
 #
+# DOCKER SCRIPTS FOR BUILDING/RUNNING WEBLOGIC
+# --------------------------------------------
+# You can also use the scripts provided in the folder ../bin to build and run WebLogic on Docker. 
+# Example building:
+#          $ sudo buildDockerImage.sh [-d]
+#                -d: builds the developer image
+#
+# Example running: 
+#          $ sudo dockWebLogic.sh [-d] 
+#                 -d: runs the developer image
+#
 
 # Pull base image
 # ---------------
@@ -49,14 +60,13 @@ ADD $JAVA_RPM /root/
 RUN rpm -i /root/$JAVA_RPM && \ 
     rm /root/$JAVA_RPM
 ENV JAVA_HOME /usr/java/default
+ENV MW_HOME /u01/oracle/wls12130
 ENV CONFIG_JVM_ARGS -Djava.security.egd=file:/dev/./urandom
 
-# Setup required packages (unzip), filesystem, and oracle user
+# Setup filesystem and oracle user
 # ------------------------------------------------------------
 # Enable this if behind proxy
-# RUN sed -i -e '/^\[main\]/aproxy=http://proxy.com:80' /etc/yum.conf
-RUN yum install -y unzip && yum clean all && \
-    mkdir /u01 && chmod a+xr /u01 && \ 
+RUN mkdir /u01 && chmod a+xr /u01 && \ 
     useradd -b /u01 -m -s /bin/bash oracle && \ 
     echo oracle:$ADMIN_PASSWORD | chpasswd
 
@@ -71,11 +81,15 @@ WORKDIR /u01
 USER oracle
 
 # Installation of Weblogic 
-RUN unzip /u01/$WLS_PKG -d /u01/oracle/ > /dev/null && \ 
-    ln -s /u01/oracle/wls12130 /u01/oracle/weblogic
+WORKDIR /u01/oracle/
+RUN jar xf /u01/$WLS_PKG
+RUN ln -s /u01/oracle/wls12130 /u01/oracle/weblogic
+RUN chown oracle:oracle -R /u01
+
 WORKDIR /u01/oracle/weblogic
-RUN sh configure.sh -silent && \ 
-    /u01/oracle/weblogic/wlserver/common/bin/wlst.sh -skipWLSModuleScanning /u01/create-wls-domain.py && \ 
+RUN sh configure.sh -silent
+RUN find /u01/oracle/wls12130 -name "*.sh" -exec chmod a+x {} \;
+RUN /u01/oracle/weblogic/wlserver/common/bin/wlst.sh -skipWLSModuleScanning /u01/create-wls-domain.py && \ 
     mkdir -p /u01/oracle/weblogic/user_projects/domains/base_domain/servers/AdminServer/security && \ 
     mv /u01/commEnv.sh /u01/oracle/weblogic/wlserver/common/bin/commEnv.sh && \ 
     echo "username=weblogic" > /u01/oracle/weblogic/user_projects/domains/base_domain/servers/AdminServer/security/boot.properties && \ 
