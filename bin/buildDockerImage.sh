@@ -74,7 +74,7 @@ fi
 echo "====================="
 
 # BUILD THE IMAGE
-docker build -t $IMAGE_NAME .
+docker build --force-rm=true --no-cache=true --rm=true -t $IMAGE_NAME .
 
 echo ""
 echo "WebLogic Docker Container is ready to be used. To start, run 'dockWebLogic.sh'"

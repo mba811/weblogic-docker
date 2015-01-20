@@ -21,7 +21,7 @@ WLS_PKG_MD5="8378fe936b476a6f4ca5efa465a435e3"
 
 setup_developer() {
 	IMAGE_NAME="oracle/weblogic:12.1.3-dev"
-	echo "Builder configured to build developer image"
+	echo "Configuration for developer distribution enabled."
         DISTRIBUTION="weblogic12c-developer"
         WLS_PKG="wls1213_dev.zip"
         WLS_PKG_MD5="0a9152e312997a630ac122ba45581a18"
