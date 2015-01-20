@@ -42,10 +42,7 @@ then
   exit
 fi
 
-MD5="$JAVA_PKG_MD5  $JAVA_PKG"
-MD5_CHECK="`md5sum $JAVA_PKG`"
-
-if [ "$MD5" != "$MD5_CHECK" ]
+if ! check_md5 $JAVA_PKG $JAVA_PKG_MD5
 then
   echo "MD5 for $JAVA_PKG does not match! Download again!"
   exit
@@ -62,10 +59,7 @@ then
   exit 
 fi
 
-MD5="$WLS_PKG_MD5  $WLS_PKG"
-MD5_CHECK="`md5sum $WLS_PKG`"
-
-if [ "$MD5" != "$MD5_CHECK" ]
+if ! check_md5 $WLS_PKG $WLS_PKG_MD5
 then
   echo "MD5 for $WLS_PKG does not match! Download again!"
   exit
@@ -76,6 +70,11 @@ echo "====================="
 # BUILD THE IMAGE
 docker build --force-rm=true --no-cache=true --rm=true -t $IMAGE_NAME .
 
-echo ""
-echo "WebLogic Docker Container is ready to be used. To start, run 'dockWebLogic.sh'"
-
+if [ $? -eq 0 ]
+then
+  echo ""
+  echo "WebLogic Docker Container is ready to be used. To start, run 'dockWebLogic.sh'"
+else
+  echo ""
+  echo "WebLogic Docker Container was NOT successfully created. Check the output and correct any reported problems with the docker build operation."
+fi
