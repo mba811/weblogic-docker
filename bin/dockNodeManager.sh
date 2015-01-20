@@ -24,6 +24,7 @@ while getopts "dhn:" optname
 	echo ""
 	echo "    -n: name of the container with a WebLogic AdminServer orchestrating a WebLogic Domain."
 	echo "        Defaults to 'wlsadmin'"
+	echo "    -d: use the developer image to run the container"	
 	echo ""
         exit 0
         ;;

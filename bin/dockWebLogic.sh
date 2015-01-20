@@ -3,6 +3,7 @@
 # Usage:  
 #    -a [port]: attach AdminServer port to host. If -a is present, will attach. Defaults to 7001.
 #    -n [name]: give a different name for the container. default: wlsadmin
+#    -d       : use the developer image to run the container
 #  $ sudo sh dockWebLogic.sh -n [container name running admin server]
 #
 # Since: October, 2014
@@ -22,8 +23,9 @@ while getopts "an:p:hd" optname
 	echo "Usage: dockWebLogic.sh [-a [-p port]] [-n mywlsadmin]"
 	echo ""
 	echo "   -a     : attach AdminServer port to host. If -a is present, will attach. Change default (7001) with -p port"
-        echo "   -p port: which port on host to attach AdminServer. Default: 7001"
+    echo "   -p port: which port on host to attach AdminServer. Default: 7001"
 	echo "   -n name: give a different name for the container. Default: wlsadmin"
+	echo "   -d     : use the developer image to run the container"
 	echo ""
         exit 0
         ;;
