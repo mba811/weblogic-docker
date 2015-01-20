@@ -43,6 +43,14 @@ while getopts "i:dhn:" optname
 
 # CHECK IF CONTAINER EXISTS AND IS RUNNING
 # Based on https://gist.github.com/ekristen/11254304 (MIT Licensed)
+echo -n "Inspecting image name of AdminServer '$ADMIN_CONTAINER_NAME'..."
+IMAGE_OF_ADMIN=$(docker inspect -f '{{.Config.Image}}' $ADMIN_CONTAINER_NAME 2> /dev/null)
+if [ "$IMAGE_OF_ADMIN" != "$IMAGE_NAME" ]; then
+  echo ""
+  echo "Admin container '$ADMIN_CONTAINER_NAME' is from a different image: '$IMAGE_OF_ADMIN', while you want to use image '$IMAGE_NAME'."
+  exit $?
+fi
+
 echo -n "Inspecting running state of AdminServer '$ADMIN_CONTAINER_NAME'..."
 ADMIN_CONTAINER_RUNNING=$(docker inspect --format="{{ .State.Running }}" $ADMIN_CONTAINER_NAME 2> /dev/null)
 
