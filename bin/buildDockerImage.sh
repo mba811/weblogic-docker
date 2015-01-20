@@ -3,7 +3,7 @@
 SCRIPTS_DIR="$( cd "$( dirname "$0" )" && pwd )"
 . $SCRIPTS_DIR/setDockerEnv.sh $*
 
-while getopts "hd" optname
+while getopts "hdf" optname
   do
     case "$optname" in
       "h")
@@ -17,6 +17,9 @@ while getopts "hd" optname
       "d")
 	setup_developer
 	;;
+      "f")
+        FLATTEN_IMAGE=true
+        ;;
       *)
       # Should not occur
         echo "Unknown error while processing options inside buildDockerImage.sh"
@@ -72,10 +75,30 @@ echo "====================="
 # BUILD THE IMAGE
 docker build --force-rm=true --no-cache=true --rm=true -t $IMAGE_NAME .
 
+flatten_image() {
+  if [ ! $FLATTEN_IMAGE ]
+  then
+    return 0
+  fi
+  echo "Flatten image flag found. Will flat this image..."
+  docker tag $IMAGE_NAME ${IMAGE_NAME}-flatten
+  CONTAINER=$(docker run -d ${IMAGE_NAME}-flatten echo)
+  docker export $CONTAINER | docker import - $IMAGE_NAME
+  docker rm -f $CONTAINER
+  docker rmi -f ${IMAGE_NAME}-flatten
+}
+
 if [ $? -eq 0 ]
 then
-  echo ""
-  echo "WebLogic Docker Container is ready to be used. To start, run 'dockWebLogic.sh'"
+  flatten_image
+  if [ $? -eq 0 ]
+  then
+    echo ""
+    echo "WebLogic Docker Container is ready to be used. To start, run 'dockWebLogic.sh'"
+  else
+    echo ""
+    echo "There was an error trying to flatten the image. Please try without the '-f' flag"
+  fi
 else
   echo ""
   echo "WebLogic Docker Container was NOT successfully created. Check the output and correct any reported problems with the docker build operation."
