@@ -16,16 +16,18 @@ SCRIPTS_DIR="$( cd "$( dirname "$0" )" && pwd )"
 . $SCRIPTS_DIR/setDockerEnv.sh $*
 
 # CHECK AND READ ARGUMENTS
-while getopts "an:p:hd" optname
+while getopts "ai:n:p:hd" optname
   do
     case "$optname" in
       "h")
-	echo "Usage: dockWebLogic.sh [-a [-p port]] [-n mywlsadmin] [-d]"
+        echo "Starts the WebLogic AdminServer within a Docker container."
+	echo "Usage: dockWebLogic.sh [-i image] [-a [-p port]] [-n mywlsadmin] [-d]"
 	echo ""
-	echo "   -a     : attach AdminServer port to host. If -a is present, will attach. Change default (7001) with -p port"
-    echo "   -p port: which port on host to attach AdminServer. Default: 7001"
-	echo "   -n name: give a different name for the container. Default: wlsadmin"
-	echo "   -d     : use the developer image to run the container"
+	echo "   -a      : attach AdminServer port to host. If -a is present, will attach. Change default (7001) with -p port"
+        echo "   -p port : which port on host to attach AdminServer. Default: 7001"
+        echo "   -i image: name of your custom WebLogic Docker image. Default: $IMAGE_NAME"
+	echo "   -n name : give a different name for the container. Default: wlsadmin"
+	echo "   -d      : use the developer image to run the container"
 	echo ""
         exit 0
         ;;
@@ -33,10 +35,13 @@ while getopts "an:p:hd" optname
         MUST_ATTACH=true
         ;;
       "p")
-        ATTACH_ADMIN_TO=$OPTARG
+        ATTACH_ADMIN_TO="$OPTARG"
         ;;
       "n")
         ADMIN_CONTAINER_NAME="$OPTARG"
+        ;;
+      "i")
+        IMAGE_NAME="$OPTARG"
         ;;
       "d")
         setup_developer

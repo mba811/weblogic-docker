@@ -13,18 +13,22 @@ SCRIPTS_DIR="$( cd "$( dirname "$0" )" && pwd )"
 
 # CHECK FOR ARGUMENTS
 # -n [name] = the name of the admin server container which this NM will automatically plug to. Must exist. Defaults to 'wlsadmin'.
-while getopts "dhn:" optname
+while getopts "i:dhn:" optname
   do
     case "$optname" in
+      "i")
+        IMAGE_NAME="$OPTARG"
+        ;;      
       "d")
         setup_developer
         ;;
       "h")
-	echo "Usage: dockNodeManager.sh [-n wls_admin_container_name] [-d]"
+	echo "Usage: dockNodeManager.sh [-i image] [-n wls_admin_container_name] [-d]"
 	echo ""
-	echo "    -n: name of the container with a WebLogic AdminServer orchestrating a WebLogic Domain."
-	echo "        Defaults to 'wlsadmin'"
-	echo "    -d: use the developer image to run the container"	
+        echo "   -i image: name of your custom WebLogic Docker image. Default: $IMAGE_NAME."
+	echo "   -n name : name of the container with a WebLogic AdminServer orchestrating a domain."
+	echo "             Defaults to 'wlsadmin'"
+	echo "   -d      : use the developer image to run the container"	
 	echo ""
         exit 0
         ;;
