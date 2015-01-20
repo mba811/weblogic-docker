@@ -20,7 +20,7 @@ while getopts "dhn:" optname
         setup_developer
         ;;
       "h")
-	echo "Usage: dockNodeManager.sh [-n wls_admin_container_name] "
+	echo "Usage: dockNodeManager.sh [-n wls_admin_container_name] [-d]"
 	echo ""
 	echo "    -n: name of the container with a WebLogic AdminServer orchestrating a WebLogic Domain."
 	echo "        Defaults to 'wlsadmin'"

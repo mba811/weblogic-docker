@@ -20,7 +20,7 @@ while getopts "an:p:hd" optname
   do
     case "$optname" in
       "h")
-	echo "Usage: dockWebLogic.sh [-a [-p port]] [-n mywlsadmin]"
+	echo "Usage: dockWebLogic.sh [-a [-p port]] [-n mywlsadmin] [-d]"
 	echo ""
 	echo "   -a     : attach AdminServer port to host. If -a is present, will attach. Change default (7001) with -p port"
     echo "   -p port: which port on host to attach AdminServer. Default: 7001"
