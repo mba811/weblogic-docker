@@ -29,36 +29,30 @@ ENV ADMIN_PASSWORD welcome1
 
 # Add files required to build this image
 COPY container-scripts/* /u01/
+
+# Root commands
 USER root
-RUN chown oracle:oracle /u01/*
-RUN mv /u01/add-machine.py /u01/createMachine.sh /u01/oracle/
-WORKDIR /u01/oracle/weblogic
-USER oracle
+RUN chown oracle:oracle /u01/* && \
+    mv /u01/add-machine.py /u01/createMachine.sh /u01/oracle/ && \
+    echo ". /u01/oracle/weblogic/user_projects/domains/base_domain/bin/setDomainEnv.sh" >> /root/.bashrc && \
+    echo "export PATH=$PATH:/u01/oracle/weblogic/wlserver/common/bin:/u01/oracle/weblogic/user_projects/domains/base_domain/bin" >> /root/.bashrc
 
 # Configuration of WLS Domain
+USER oracle
+WORKDIR /u01/oracle/weblogic
 RUN /u01/oracle/weblogic/wlserver/common/bin/wlst.sh -skipWLSModuleScanning /u01/create-wls-domain.py && \
     mkdir -p /u01/oracle/weblogic/user_projects/domains/base_domain/servers/AdminServer/security && \
     mv /u01/commEnv.sh /u01/oracle/weblogic/wlserver/common/bin/commEnv.sh && \
     echo "username=weblogic" > /u01/oracle/weblogic/user_projects/domains/base_domain/servers/AdminServer/security/boot.properties && \ 
-    echo "password=$ADMIN_PASSWORD" >> /u01/oracle/weblogic/user_projects/domains/base_domain/servers/AdminServer/security/boot.properties
-
-# Configuration of user 'oracle' environment
-RUN echo ". /u01/oracle/weblogic/user_projects/domains/base_domain/bin/setDomainEnv.sh" >> /u01/oracle/.bashrc && \ 
-    echo "export PATH=$PATH:/u01/oracle/weblogic/wlserver/common/bin:/u01/oracle/weblogic/user_projects/domains/base_domain/bin" >> /u01/oracle/.bashrc
-
-# Cleanup
-RUN rm /u01/create-wls-domain.py /u01/jaxrs2-template.jar 
+    echo "password=$ADMIN_PASSWORD" >> /u01/oracle/weblogic/user_projects/domains/base_domain/servers/AdminServer/security/boot.properties && \
+    echo ". /u01/oracle/weblogic/user_projects/domains/base_domain/bin/setDomainEnv.sh" >> /u01/oracle/.bashrc && \ 
+    echo "export PATH=$PATH:/u01/oracle/weblogic/wlserver/common/bin:/u01/oracle/weblogic/user_projects/domains/base_domain/bin" >> /u01/oracle/.bashrc && \
+    rm /u01/create-wls-domain.py /u01/jaxrs2-template.jar 
 
 # Expose Node Manager default port, and also default http/https ports for admin console
 EXPOSE 5556 7001 7002
 
-# Make sure root has also right PATH and WLS environment variables configured
-USER root
-RUN echo ". /u01/oracle/weblogic/user_projects/domains/base_domain/bin/setDomainEnv.sh" >> /root/.bashrc && \ 
-    echo "export PATH=$PATH:/u01/oracle/weblogic/wlserver/common/bin:/u01/oracle/weblogic/user_projects/domains/base_domain/bin" >> /root/.bashrc
-
 # Final setup
-USER oracle
 WORKDIR /u01/oracle
 
 # Define default command to start bash. 
