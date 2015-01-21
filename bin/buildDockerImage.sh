@@ -45,8 +45,9 @@ then
   exit
 fi
 
+
 check_md5 $JAVA_PKG $JAVA_PKG_MD5
-if [ "$?" -eq 0 ]
+if [ "$?" -ne 0 ]
 then
   echo "MD5 for $JAVA_PKG does not match! Download again!"
   exit
@@ -64,7 +65,7 @@ then
 fi
 
 check_md5 $WLS_PKG $WLS_PKG_MD5
-if [ "$?" -eq 0 ]
+if [ "$?" -ne 0 ]
 then
   echo "MD5 for $WLS_PKG does not match! Download again!"
   exit
