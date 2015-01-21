@@ -31,13 +31,11 @@ setup_developer() {
 # Function to check MD5 of $1 against expected value $2
 #
 check_md5() {
-#  echo "check_md5 $1 $2" 
+  MD5="MD5 ($1) = $2"
   if [[ "`uname`" == 'Darwin' ]]; then
     MD5_CHECK=`md5 "$1"`
-    MD5="MD5 ($1) = $2"
   else 
-    MD5_CHECK="$(md5sum $1)"
-    MD5="$2  $1"
+    MD5_CHECK="$(md5sum --tag $1)"
   fi
     
   if [[ "$MD5" == "$MD5_CHECK" ]]; then 
