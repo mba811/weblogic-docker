@@ -37,7 +37,7 @@ check_md5() {
     MD5="MD5 ($1) = $2"
   else 
     MD5_CHECK="$(md5sum $1)"
-    MD5="$2 $1"
+    MD5="$2  $1"
   fi
     
   if [[ "$MD5" == "$MD5_CHECK" ]]; then 
